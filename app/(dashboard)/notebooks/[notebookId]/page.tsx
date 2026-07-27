@@ -1,8 +1,14 @@
 import { notFound } from "next/navigation";
 
 import { requireUser } from "@/features/auth/session";
+
 import { getNotebookById } from "@/features/notebooks/repositories/notebook.repository";
 
+import { getNotebookSources } from "@/features/sources/repositories/source.repository";
+
+import { SourceList } from "@/features/sources/components/source-list";
+
+import { AddSourceDialog } from "@/features/sources/components/add-source-dialog";
 
 interface Props {
   params: Promise<{
@@ -32,8 +38,17 @@ export default async function NotebookPage({
   }
 
 
+  const sources =
+    await getNotebookSources(
+      notebook.id
+    );
+
+
   return (
-    <main className="container mx-auto py-10 space-y-6">
+    <main className="container mx-auto py-10 space-y-8">
+
+
+      {/* Notebook Header */}
 
       <div>
         <h1 className="text-3xl font-bold">
@@ -47,18 +62,47 @@ export default async function NotebookPage({
       </div>
 
 
-      <div className="rounded-lg border p-6">
-        <h2 className="font-semibold">
-          Sources
-        </h2>
 
-        <p className="text-sm text-muted-foreground">
-          No sources added yet.
-        </p>
-      </div>
+      {/* Sources */}
+
+      <section className="space-y-4">
 
 
-      <div className="rounded-lg border p-6">
+        <div className="flex items-center justify-between">
+
+          <div>
+            <h2 className="text-xl font-semibold">
+              Sources
+            </h2>
+
+            <p className="text-sm text-muted-foreground">
+              Add documents to your knowledge base.
+            </p>
+          </div>
+
+
+          <AddSourceDialog
+            notebookId={notebook.id}
+          />
+
+
+        </div>
+
+
+
+        <SourceList
+          sources={sources}
+        />
+
+
+      </section>
+
+
+
+      {/* Chat */}
+
+      <section className="rounded-lg border p-6">
+
         <h2 className="font-semibold">
           Chat
         </h2>
@@ -66,7 +110,8 @@ export default async function NotebookPage({
         <p className="text-sm text-muted-foreground">
           Ask questions about your knowledge base.
         </p>
-      </div>
+
+      </section>
 
 
     </main>
