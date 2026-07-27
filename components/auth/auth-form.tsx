@@ -55,9 +55,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
       router.push("/");
       router.refresh();
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Something went wrong."
-      );
+      setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -114,17 +112,9 @@ export function AuthForm({ mode }: { mode: Mode }) {
               />
             </div>
 
-            {error && (
-              <p className="text-sm text-destructive">
-                {error}
-              </p>
-            )}
+            {error && <p className="text-destructive text-sm">{error}</p>}
 
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full"
-            >
+            <Button type="submit" disabled={loading} className="w-full">
               {loading
                 ? mode === "signup"
                   ? "Creating account..."
