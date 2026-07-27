@@ -26,8 +26,6 @@ export async function createNotebook(data: {
 export async function getUserNotebooks(userId: string) {
   return db.query.notebooks.findMany({
     where: eq(notebooks.userId, userId),
-    orderBy: (notebooks, { desc }) => [
-      desc(notebooks.createdAt),
-    ],
+    orderBy: (notebooks, { desc }) => [desc(notebooks.createdAt)],
   });
 }
