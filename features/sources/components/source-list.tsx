@@ -9,7 +9,7 @@ interface Props {
 export function SourceList({ sources }: Props) {
   if (!sources.length) {
     return (
-      <div className="text-center text-muted-foreground">
+      <div className="text-muted-foreground text-center">
         No sources added yet.
       </div>
     );
@@ -18,10 +18,7 @@ export function SourceList({ sources }: Props) {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {sources.map((source) => (
-        <SourceCard
-          key={source.id}
-          source={source}
-        />
+        <SourceCard key={source.id} source={source} />
       ))}
     </div>
   );

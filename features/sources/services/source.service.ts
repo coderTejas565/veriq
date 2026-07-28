@@ -1,12 +1,12 @@
 import { createId } from "@paralleldrive/cuid2";
 
-import { getExtractor } from "../extractors/extractor.registry";
-
 import {
   createSource,
   updateSource,
   updateSourceStatus,
 } from "../repositories/source.repository";
+
+import { ingestSource } from "./ingestion.service";
 
 import type { SourceType } from "../types";
 
@@ -16,9 +16,7 @@ interface CreateSourceInput {
   source: string;
 }
 
-export async function createSourceService(
-  input: CreateSourceInput,
-) {
+export async function createSourceService(input: CreateSourceInput) {
   // 1. Create processing record
   const created = await createSource({
     id: createId(),
@@ -28,32 +26,22 @@ export async function createSourceService(
   });
 
   try {
-    // 2. Select extractor
-    const extractor = getExtractor(input.type);
-
-    // 3. Extract content
-    const extracted = await extractor.extract({
+    // 2. Complete extraction + chunking + embeddings
+    const result = await ingestSource({
+      sourceId: created.id,
+      notebookId: input.notebookId,
+      type: input.type,
       source: input.source,
     });
 
-    // TODO:
-    // chunkService(...)
-    // embeddingService(...)
-    // chunkRepository(...)
-
-    // 4. Update source
+    // 3. Mark source ready
     return await updateSource(created.id, {
-      title: extracted.title,
-      metadata: extracted.metadata ?? null,
+      title: result.title,
+      metadata: result.metadata ?? null,
       status: "READY",
     });
-
   } catch (error) {
-
-    await updateSourceStatus(
-      created.id,
-      "FAILED",
-    );
+    await updateSourceStatus(created.id, "FAILED");
 
     throw error;
   }

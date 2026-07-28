@@ -23,82 +23,60 @@ export function CreateNotebookDialog() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-  e.preventDefault();
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
 
-  console.log("submit fired");
+    console.log("submit fired");
 
-  const formData = new FormData(e.currentTarget);
+    const formData = new FormData(e.currentTarget);
 
-  console.log({
-    title: formData.get("title"),
-    description: formData.get("description"),
-  });
-
-  setLoading(true);
-
-  try {
-    const notebook = await createNotebookAction({
+    console.log({
       title: formData.get("title"),
       description: formData.get("description"),
     });
 
-    console.log("created notebook", notebook);
+    setLoading(true);
 
-    setOpen(false);
+    try {
+      const notebook = await createNotebookAction({
+        title: formData.get("title"),
+        description: formData.get("description"),
+      });
 
-    router.push(`/notebooks/${notebook.id}`);
-  } catch (error) {
-    console.error(error);
-  } finally {
-    setLoading(false);
+      console.log("created notebook", notebook);
+
+      setOpen(false);
+
+      router.push(`/notebooks/${notebook.id}`);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   }
-}
 
   return (
-  <Dialog open={open} onOpenChange={setOpen}>
-    
-    <DialogTrigger
-      render={<Button />}
-    >
-      New Notebook
-    </DialogTrigger>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger render={<Button />}>New Notebook</DialogTrigger>
 
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Create Notebook</DialogTitle>
+        </DialogHeader>
 
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle>
-          Create Notebook
-        </DialogTitle>
-      </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Input name="title" placeholder="Notebook name" required />
 
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-4"
-      >
-        <Input
-          name="title"
-          placeholder="Notebook name"
-          required
-        />
+          <Textarea
+            name="description"
+            placeholder="What is this notebook about?"
+          />
 
-        <Textarea
-          name="description"
-          placeholder="What is this notebook about?"
-        />
-
-        <Button
-  type="submit"
-  disabled={loading}
-  className="w-full"
->
-  {loading ? "Creating..." : "Create Notebook"}
-</Button>
-
-      </form>
-
-    </DialogContent>
-
-  </Dialog>
-);
+          <Button type="submit" disabled={loading} className="w-full">
+            {loading ? "Creating..." : "Create Notebook"}
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
 }

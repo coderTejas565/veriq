@@ -28,10 +28,7 @@ export async function createSource(data: {
   return source;
 }
 
-export async function updateSourceStatus(
-  id: string,
-  status: SourceStatus,
-) {
+export async function updateSourceStatus(id: string, status: SourceStatus) {
   const [source] = await db
     .update(sources)
     .set({
@@ -50,39 +47,30 @@ export async function getSourceById(id: string) {
   });
 }
 
-export async function getNotebookSources(
-  notebookId: string,
-) {
+export async function getNotebookSources(notebookId: string) {
   return db.query.sources.findMany({
     where: eq(sources.notebookId, notebookId),
-    orderBy: (sources, { desc }) => [
-      desc(sources.createdAt),
-    ],
+    orderBy: (sources, { desc }) => [desc(sources.createdAt)],
   });
 }
 
-export async function deleteSource(
-  id: string,
-  notebookId: string,
-) {
+export async function deleteSource(id: string, notebookId: string) {
   const [deleted] = await db
     .delete(sources)
-    .where(
-      and(
-        eq(sources.id, id),
-        eq(sources.notebookId, notebookId),
-      ),
-    )
+    .where(and(eq(sources.id, id), eq(sources.notebookId, notebookId)))
     .returning();
 
   return deleted;
 }
 
-export async function updateSource(id: string, data: {
-  title?: string;
-  status?: SourceStatus;
-  metadata?: Record<string, unknown> | null;
-}) {
+export async function updateSource(
+  id: string,
+  data: {
+    title?: string;
+    status?: SourceStatus;
+    metadata?: Record<string, unknown> | null;
+  },
+) {
   const [source] = await db
     .update(sources)
     .set({

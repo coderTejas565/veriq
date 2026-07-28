@@ -8,9 +8,7 @@ import { addSourceSchema } from "../validations/source";
 export async function addSourceAction(input: unknown) {
   const data = addSourceSchema.parse(input);
 
-  const { notebook } = await requireNotebookOwner(
-    data.notebookId,
-  );
+  const { notebook } = await requireNotebookOwner(data.notebookId);
 
   return createSourceService({
     notebookId: notebook.id,

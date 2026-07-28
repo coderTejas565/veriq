@@ -30,9 +30,7 @@ interface Props {
   notebookId: string;
 }
 
-export function AddSourceDialog({
-  notebookId,
-}: Props) {
+export function AddSourceDialog({ notebookId }: Props) {
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
@@ -41,8 +39,7 @@ export function AddSourceDialog({
 
   const [source, setSource] = useState("");
 
-  const [pending, startTransition] =
-    useTransition();
+  const [pending, startTransition] = useTransition();
 
   function handleSubmit() {
     startTransition(async () => {
@@ -64,15 +61,8 @@ export function AddSourceDialog({
   }
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={setOpen}
-    >
-      <DialogTrigger
-      render={<Button />}
-    >
-        <Button>Add Source</Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger render={<Button />}>Add Source</DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
@@ -81,40 +71,29 @@ export function AddSourceDialog({
 
         <div className="space-y-4">
           <Select
-  value={type}
-  onValueChange={(value) => {
-    if (!value) return;
+            value={type}
+            onValueChange={(value) => {
+              if (!value) return;
 
-    setType(value as SourceType);
-  }}
->
+              setType(value as SourceType);
+            }}
+          >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
 
             <SelectContent>
-              <SelectItem value="TEXT">
-                Text
-              </SelectItem>
+              <SelectItem value="TEXT">Text</SelectItem>
 
-              <SelectItem
-                value="PDF"
-                disabled
-              >
+              <SelectItem value="PDF" disabled>
                 PDF (Coming Soon)
               </SelectItem>
 
-              <SelectItem
-                value="WEBSITE"
-                disabled
-              >
+              <SelectItem value="WEBSITE" disabled>
                 Website (Coming Soon)
               </SelectItem>
 
-              <SelectItem
-                value="YOUTUBE"
-                disabled
-              >
+              <SelectItem value="YOUTUBE" disabled>
                 YouTube (Coming Soon)
               </SelectItem>
             </SelectContent>
@@ -122,23 +101,17 @@ export function AddSourceDialog({
 
           <Textarea
             value={source}
-            onChange={(e) =>
-              setSource(e.target.value)
-            }
+            onChange={(e) => setSource(e.target.value)}
             placeholder="Paste your notes here..."
             rows={10}
           />
 
           <Button
             onClick={handleSubmit}
-            disabled={
-              pending || source.trim() === ""
-            }
+            disabled={pending || source.trim() === ""}
             className="w-full"
           >
-            {pending
-              ? "Adding..."
-              : "Add Source"}
+            {pending ? "Adding..." : "Add Source"}
           </Button>
         </div>
       </DialogContent>

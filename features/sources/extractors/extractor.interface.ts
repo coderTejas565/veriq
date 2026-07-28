@@ -33,7 +33,5 @@ export interface ExtractorResult {
 }
 
 export interface SourceExtractor {
-  extract(
-    input: ExtractorInput
-  ): Promise<ExtractorResult>;
+  extract(input: ExtractorInput): Promise<ExtractorResult>;
 }

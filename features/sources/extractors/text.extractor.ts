@@ -5,9 +5,7 @@ import type {
 } from "./extractor.interface";
 
 export class TextExtractor implements SourceExtractor {
-  async extract(
-    input: ExtractorInput,
-  ): Promise<ExtractorResult> {
+  async extract(input: ExtractorInput): Promise<ExtractorResult> {
     const content = input.source.trim();
 
     const DEFAULT_TEXT_TITLE = "Untitled Text";

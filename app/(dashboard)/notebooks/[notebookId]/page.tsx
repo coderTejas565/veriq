@@ -16,104 +16,58 @@ interface Props {
   }>;
 }
 
-
-export default async function NotebookPage({
-  params,
-}: Props) {
-
+export default async function NotebookPage({ params }: Props) {
   const { notebookId } = await params;
 
   const user = await requireUser();
 
-
-  const notebook =
-    await getNotebookById(
-      notebookId,
-      user.id
-    );
-
+  const notebook = await getNotebookById(notebookId, user.id);
 
   if (!notebook) {
     notFound();
   }
 
-
-  const sources =
-    await getNotebookSources(
-      notebook.id
-    );
-
+  const sources = await getNotebookSources(notebook.id);
 
   return (
-    <main className="container mx-auto py-10 space-y-8">
-
-
+    <main className="container mx-auto space-y-8 py-10">
       {/* Notebook Header */}
 
       <div>
-        <h1 className="text-3xl font-bold">
-          {notebook.title}
-        </h1>
+        <h1 className="text-3xl font-bold">{notebook.title}</h1>
 
         <p className="text-muted-foreground">
-          {notebook.description ??
-            "No description"}
+          {notebook.description ?? "No description"}
         </p>
       </div>
-
-
 
       {/* Sources */}
 
       <section className="space-y-4">
-
-
         <div className="flex items-center justify-between">
-
           <div>
-            <h2 className="text-xl font-semibold">
-              Sources
-            </h2>
+            <h2 className="text-xl font-semibold">Sources</h2>
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Add documents to your knowledge base.
             </p>
           </div>
 
-
-          <AddSourceDialog
-            notebookId={notebook.id}
-          />
-
-
+          <AddSourceDialog notebookId={notebook.id} />
         </div>
 
-
-
-        <SourceList
-          sources={sources}
-        />
-
-
+        <SourceList sources={sources} />
       </section>
-
-
 
       {/* Chat */}
 
       <section className="rounded-lg border p-6">
+        <h2 className="font-semibold">Chat</h2>
 
-        <h2 className="font-semibold">
-          Chat
-        </h2>
-
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Ask questions about your knowledge base.
         </p>
-
       </section>
-
-
     </main>
   );
 }

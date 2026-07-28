@@ -30,18 +30,11 @@ export async function getUserNotebooks(userId: string) {
   });
 }
 
-export async function getNotebookById(
-  notebookId: string,
-  userId: string
-) {
-  const notebook =
-    await db.query.notebooks.findFirst({
-      where: (notebooks, { and, eq }) =>
-        and(
-          eq(notebooks.id, notebookId),
-          eq(notebooks.userId, userId)
-        ),
-    });
+export async function getNotebookById(notebookId: string, userId: string) {
+  const notebook = await db.query.notebooks.findFirst({
+    where: (notebooks, { and, eq }) =>
+      and(eq(notebooks.id, notebookId), eq(notebooks.userId, userId)),
+  });
 
   return notebook ?? null;
 }
