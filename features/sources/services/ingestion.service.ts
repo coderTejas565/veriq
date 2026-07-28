@@ -4,7 +4,8 @@ import { getExtractor } from "../extractors/extractor.registry";
 
 import { splitIntoChunks } from "../chunking/chunker";
 
-import { generateEmbedding } from "../embeddings/embedding.service";
+import { generateEmbedding } 
+from "../embeddings/embedding.service";
 
 import { createChunks } from "../repositories/chunk.repository";
 
