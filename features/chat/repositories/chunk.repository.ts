@@ -7,15 +7,17 @@ export async function searchSimilarChunks(
   embedding: number[],
   limit = 5,
 ): Promise<RetrievedChunk[]> {
+  const vector = `[${embedding.join(",")}]`;
+
   const rows = await client<RetrievedChunk[]>`
     SELECT
       id,
       content,
       source_id AS "sourceId",
-      1 - (embedding <=> ${embedding}) AS similarity
+      1 - (embedding <=> ${vector}::vector) AS similarity
     FROM chunks
     WHERE notebook_id = ${notebookId}
-    ORDER BY embedding <=> ${embedding}
+    ORDER BY embedding <=> ${vector}::vector
     LIMIT ${limit}
   `;
 
