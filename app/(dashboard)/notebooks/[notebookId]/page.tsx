@@ -33,11 +33,7 @@ export default async function NotebookPage({ params }: Props) {
 
   const sources = await getNotebookSources(notebook.id);
 
-    const messages =
-    await getNotebookMessages(
-      notebook.id,
-    );
-
+  const messages = await getNotebookMessages(notebook.id);
 
   return (
     <main className="container mx-auto space-y-8 py-10">
@@ -71,10 +67,7 @@ export default async function NotebookPage({ params }: Props) {
 
       {/* Chat */}
 
-      <ChatPanel
-        notebookId={notebook.id}
-        messages={messages}
-      />
+      <ChatPanel notebookId={notebook.id} messages={messages} />
     </main>
   );
 }

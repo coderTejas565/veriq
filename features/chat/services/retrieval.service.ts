@@ -10,9 +10,5 @@ export async function retrieveRelevantChunks(
   const embedding = await generateEmbedding(query);
 
   // 2. Perform vector similarity search
-  return searchSimilarChunks(
-    notebookId,
-    embedding,
-    5,
-  );
+  return searchSimilarChunks(notebookId, embedding, 5);
 }

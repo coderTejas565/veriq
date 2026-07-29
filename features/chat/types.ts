@@ -3,10 +3,7 @@ export interface ChatMessageDTO {
 
   notebookId: string;
 
-  role:
-    | "USER"
-    | "ASSISTANT"
-    | "SYSTEM";
+  role: "USER" | "ASSISTANT" | "SYSTEM";
 
   content: string;
 

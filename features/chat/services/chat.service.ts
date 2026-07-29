@@ -9,10 +9,7 @@ import { buildContext } from "./context.service";
 
 import { buildChatPrompt } from "../prompts/chat.prompt";
 
-export async function chatWithNotebook(
-  notebookId: string,
-  question: string,
-) {
+export async function chatWithNotebook(notebookId: string, question: string) {
   // 1. Store user message
   await createMessage({
     id: createId(),
@@ -22,10 +19,7 @@ export async function chatWithNotebook(
   });
 
   // 2. Retrieve relevant notebook chunks
-  const chunks = await retrieveRelevantChunks(
-    notebookId,
-    question,
-  );
+  const chunks = await retrieveRelevantChunks(notebookId, question);
 
   // 3. Build context
   const context = buildContext(chunks);
@@ -37,15 +31,12 @@ export async function chatWithNotebook(
   });
 
   // 5. Generate answer
-  const response =
-    await gemini.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: prompt,
-    });
+  const response = await gemini.models.generateContent({
+    model: "gemini-2.5-flash",
+    contents: prompt,
+  });
 
-  const answer =
-    response.text?.trim() ??
-    "I couldn't generate a response.";
+  const answer = response.text?.trim() ?? "I couldn't generate a response.";
 
   // 6. Store assistant message
   await createMessage({

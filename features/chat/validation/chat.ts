@@ -5,6 +5,4 @@ export const sendMessageSchema = z.object({
   question: z.string().min(1),
 });
 
-export type SendMessageInput = z.infer<
-  typeof sendMessageSchema
->;
+export type SendMessageInput = z.infer<typeof sendMessageSchema>;
