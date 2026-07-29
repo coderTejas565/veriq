@@ -10,6 +10,10 @@ import { SourceList } from "@/features/sources/components/source-list";
 
 import { AddSourceDialog } from "@/features/sources/components/add-source-dialog";
 
+import { getNotebookMessages } from "@/features/chat/repositories/message.repository";
+
+import { ChatPanel } from "@/features/chat/components/chat-panel";
+
 interface Props {
   params: Promise<{
     notebookId: string;
@@ -28,6 +32,12 @@ export default async function NotebookPage({ params }: Props) {
   }
 
   const sources = await getNotebookSources(notebook.id);
+
+    const messages =
+    await getNotebookMessages(
+      notebook.id,
+    );
+
 
   return (
     <main className="container mx-auto space-y-8 py-10">
@@ -61,13 +71,10 @@ export default async function NotebookPage({ params }: Props) {
 
       {/* Chat */}
 
-      <section className="rounded-lg border p-6">
-        <h2 className="font-semibold">Chat</h2>
-
-        <p className="text-muted-foreground text-sm">
-          Ask questions about your knowledge base.
-        </p>
-      </section>
+      <ChatPanel
+        notebookId={notebook.id}
+        messages={messages}
+      />
     </main>
   );
 }
