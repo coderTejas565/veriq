@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { BookOpen } from "lucide-react";
 
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
 
@@ -23,60 +25,202 @@ export function CreateNotebookDialog() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+
+  async function handleSubmit(
+    e: React.FormEvent<HTMLFormElement>,
+  ) {
     e.preventDefault();
 
-    console.log("submit fired");
-
     const formData = new FormData(e.currentTarget);
-
-    console.log({
-      title: formData.get("title"),
-      description: formData.get("description"),
-    });
 
     setLoading(true);
 
     try {
-      const notebook = await createNotebookAction({
-        title: formData.get("title"),
-        description: formData.get("description"),
-      });
-
-      console.log("created notebook", notebook);
+      const notebook =
+        await createNotebookAction({
+          title: formData.get("title"),
+          description: formData.get("description"),
+        });
 
       setOpen(false);
 
       router.push(`/notebooks/${notebook.id}`);
+
     } catch (error) {
       console.error(error);
+
     } finally {
       setLoading(false);
     }
   }
 
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button />}>New Notebook</DialogTrigger>
 
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Create Notebook</DialogTitle>
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={setOpen}
+    >
+
+      <DialogTrigger render={<Button />}>
+        New Notebook
+      </DialogTrigger>
+
+
+      <DialogContent
+        className="
+          sm:max-w-md
+          rounded-3xl
+          p-6
+          shadow-xl
+        "
+      >
+
+        <DialogHeader
+          className="
+            space-y-4
+          "
+        >
+
+          <div
+            className="
+              flex
+              h-11
+              w-11
+              items-center
+              justify-center
+              rounded-2xl
+              bg-primary/10
+              text-primary
+            "
+          >
+            <BookOpen className="h-5 w-5" />
+          </div>
+
+
+          <div className="space-y-2">
+
+            <DialogTitle
+              className="
+                text-xl
+                font-semibold
+                tracking-tight
+              "
+            >
+              Create Notebook
+            </DialogTitle>
+
+
+            <DialogDescription
+              className="
+                leading-6
+              "
+            >
+              Create an AI workspace where VeriQ
+              can learn from your documents and
+              answer questions using your knowledge.
+            </DialogDescription>
+
+          </div>
+
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input name="title" placeholder="Notebook name" required />
 
-          <Textarea
-            name="description"
-            placeholder="What is this notebook about?"
-          />
 
-          <Button type="submit" disabled={loading} className="w-full">
-            {loading ? "Creating..." : "Create Notebook"}
-          </Button>
+        <form
+          onSubmit={handleSubmit}
+          className="
+            mt-7
+            space-y-5
+          "
+        >
+
+          <div className="space-y-2">
+
+            <label
+              className="
+                text-sm
+                font-medium
+              "
+            >
+              Notebook name
+            </label>
+
+
+            <Input
+              name="title"
+              placeholder="React Documentation"
+              required
+              className="
+                h-11
+                rounded-xl
+                bg-background
+              "
+            />
+
+          </div>
+
+
+
+          <div className="space-y-2">
+
+            <label
+              className="
+                text-sm
+                font-medium
+              "
+            >
+              Description
+            </label>
+
+
+            <Textarea
+              name="description"
+              placeholder="What knowledge will this notebook contain?"
+              rows={4}
+              className="
+                resize-none
+                rounded-xl
+                bg-background
+                leading-6
+              "
+            />
+
+          </div>
+
+
+
+          <div
+            className="
+              flex
+              items-center
+              justify-end
+              gap-3
+              pt-2
+            "
+          >
+
+            <Button
+              type="submit"
+              disabled={loading}
+              className="
+                h-11
+                w-full
+                rounded-xl
+              "
+            >
+              {loading
+                ? "Creating..."
+                : "Create Notebook"}
+            </Button>
+
+          </div>
+
+
         </form>
+
+
       </DialogContent>
+
     </Dialog>
   );
 }

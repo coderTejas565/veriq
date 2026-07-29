@@ -36,7 +36,7 @@ export default async function NotebookPage({ params }: Props) {
   const messages = await getNotebookMessages(notebook.id);
 
   return (
-    <main className="page-container space-y-8">
+    <main className="space-y-5">
       {/* Header */}
 
       <section className="bg-card rounded-2xl border px-6 py-5 shadow-sm">
